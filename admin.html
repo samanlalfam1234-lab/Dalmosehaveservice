@@ -79,7 +79,6 @@
 
     <script>
         let orderToDelete = null;
-        const allowedAdmins = ['liamkurstein12@gmail.com', 'liamkurstien12@gmail.com', 'samanlalfam1234@gmail.com'];
 
         function showStatus(title, message) {
             document.getElementById('statusTitle').textContent = title;
@@ -89,7 +88,7 @@
 
         async function checkAccess() {
             const { data: { session } } = await window.supabaseClient.auth.getSession();
-            if (!session || !allowedAdmins.includes(session.user.email)) {
+            if (!session || !window.isAdmin(session.user.email)) {
                 window.location.href = 'index.html';
                 return;
             }

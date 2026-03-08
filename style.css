@@ -1204,11 +1204,25 @@ footer p {
     background: linear-gradient(to bottom, transparent 70%, var(--dark-green));
 }
 
-/* Animations */
+/* Admin Table Enhancement */
+#ordersTableBody tr:hover {
+    background-color: #f9f9f9;
+}
+
+#ordersTableBody td {
+    border-bottom: 1px solid #eee;
+}
+
+/* Modal animation improvements */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
 @keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: translateY(40px);
+        transform: translateY(20px);
     }
     to {
         opacity: 1;
