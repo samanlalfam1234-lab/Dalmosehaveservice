@@ -65,11 +65,20 @@
     </footer>
 
     <script>
+        const allowedAdmins = ['liamkurstein12@gmail.com', 'samanlalfam1234@gmail.com'];
+
         async function updateUI() {
             const { data: { session } } = await window.supabaseClient.auth.getSession();
             if (session) {
                 document.getElementById('loginWrapper').style.display = 'none';
                 document.getElementById('logoutWrapper').style.display = 'block';
+
+                // Admin shortcut
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'F2' && allowedAdmins.includes(session.user.email)) {
+                        window.location.href = 'admin.html';
+                    }
+                });
             }
         }
         updateUI();
