@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bestil - Dalmose Haveservice</title>
+    <title>Bestil - Dalmose Naturservice</title>
     <link rel="icon" type="image/png" href="image_2026-03-06_153044943-removebg-preview.png">
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,7 +17,7 @@
         <div class="container">
             <nav>
                 <a href="index.html" class="logo">
-                    <img src="image_2026-03-06_153044943-removebg-preview.png" alt="Dalmose Haveservice Logo" class="logo-img">
+                    <img src="image_2026-03-06_153044943-removebg-preview.png" alt="Dalmose Naturservice Logo" class="logo-img">
                 </a>
                 <ul class="nav-links">
                     <li><a href="index.html" class="nav-cta">Forside</a></li>
@@ -34,8 +34,8 @@
 
     <section class="hero-small">
         <div class="container">
-            <span class="hero-brand">Dalmose Haveservice</span>
-            <h1 class="main-title">Bestil haveservice</h1>
+            <span class="hero-brand">Dalmose Naturservice</span>
+            <h1 class="main-title">Bestil naturservice</h1>
             <p>Fortæl os om din opgave, så vender vi hurtigt tilbage med et uforpligtende tilbud.</p>
         </div>
     </section>
@@ -85,7 +85,7 @@
                 </form>
 
                 <div class="order-footer-info">
-                    <p>info@dalmosehaveservice.dk  &bull;  20 66 53 15 / 42 15 77 92</p>
+                    <p>info@dalmosenaturservice.dk  &bull;  20 66 53 15 / 42 15 77 92</p>
                 </div>
             </div>
         </div>
@@ -93,7 +93,7 @@
 
     <footer>
         <div class="container footer-content">
-            <p>&copy; 2026 Dalmose Haveservice. Alle rettigheder forbeholdes.</p>
+            <p>&copy; 2026 Dalmose Naturservice. Alle rettigheder forbeholdes.</p>
         </div>
     </footer>
 
@@ -180,24 +180,36 @@
                 return;
             }
 
-            const formData = {
-                name: this.querySelector('input[placeholder="Navn"]').value,
-                email: this.querySelector('input[placeholder="Email"]').value,
-                phone: this.querySelector('input[placeholder="Telefonnummer"]').value,
-                address: this.querySelector('input[placeholder="Adresse (Vej, Nr, By)"]').value,
-                service: this.querySelector('input[name="ydelse"]:checked').value,
-                date: this.querySelector('#dato').value,
-                time: this.querySelector('#tid').value,
-                description: this.querySelector('textarea').value
-            };
+            const name = this.querySelector('input[placeholder="Navn"]').value;
+            const email = this.querySelector('input[placeholder="Email"]').value;
+            const phone = this.querySelector('input[placeholder="Telefonnummer"]').value;
+            const address = this.querySelector('input[placeholder="Adresse (Vej, Nr, By)"]').value;
+            const service = this.querySelector('input[name="ydelse"]:checked').value;
+            const date = this.querySelector('#dato').value;
+            const time = this.querySelector('#tid').value;
+            const description = this.querySelector('textarea').value;
 
-            const { error } = await window.supabaseClient
+            // Prøv først med 'time' kolonnen
+            let { error } = await window.supabaseClient
                 .from('orders')
-                .insert([formData]);
+                .insert([{
+                    name, email, phone, address, service, date, time, description
+                }]);
+
+            // Hvis det fejler pga. manglende 'time' kolonne, prøv uden
+            if (error && error.message.includes("'time' column")) {
+                const altDescription = `[Tid: ${time}] ${description}`;
+                const fallbackResult = await window.supabaseClient
+                    .from('orders')
+                    .insert([{
+                        name, email, phone, address, service, date, description: altDescription
+                    }]);
+                error = fallbackResult.error;
+            }
 
             if (error) {
                 console.error('Fejl ved bestilling:', error);
-                showStatus("Der skete en fejl", error.message);
+                showStatus("Der skete en fejl", error.message + " (Sørg for at 'orders' tabellen er oprettet i Supabase med de rigtige kolonner og RLS er slået fra/sat til public)");
                 return;
             }
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Dalmose Haveservice</title>
+    <title>Admin - Dalmose Naturservice</title>
     <link rel="icon" type="image/png" href="image_2026-03-06_153044943-removebg-preview.png">
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,7 +17,7 @@
         <div class="container">
             <nav>
                 <a href="index.html" class="logo">
-                    <img src="image_2026-03-06_153044943-removebg-preview.png" alt="Dalmose Haveservice Logo" class="logo-img">
+                    <img src="image_2026-03-06_153044943-removebg-preview.png" alt="Dalmose Naturservice Logo" class="logo-img">
                 </a>
                 <ul class="nav-links">
                     <li><a href="index.html" class="nav-cta">Forside</a></li>
@@ -104,38 +104,56 @@
                 .order('created_at', { ascending: false });
 
             if (error) {
-                console.error('Fejl:', error);
+                console.error('Fejl ved hentning af ordrer:', error);
+                showStatus('Fejl', 'Kunne ikke hente ordrer: ' + error.message + ' (Tjek om "orders" tabellen findes i Supabase)');
                 return;
             }
 
             const tbody = document.getElementById('ordersTableBody');
             if (!orders || orders.length === 0) {
-                tbody.innerHTML = '';
+                tbody.innerHTML = '<tr><td colspan="6" style="padding: 40px; text-align: center; color: #888;">Ingen bestillinger fundet i databasen.</td></tr>';
                 return;
             }
 
-            tbody.innerHTML = orders.map(order => `
-                <tr style="border-bottom: 1px solid #f0f0f0;">
-                    <td style="padding: 15px;">
-                        <div style="font-weight: 700; color: var(--dark-green);">${order.date || '-'}</div>
-                        <div style="font-size: 0.75rem; color: #999;">kl. ${order.time || '-'}</div>
-                    </td>
-                    <td style="padding: 15px; font-weight: 700;">${order.name}</td>
-                    <td style="padding: 15px;">
-                        <span style="background: rgba(26, 48, 32, 0.08); color: var(--dark-green); padding: 4px 10px; border-radius: 4px; font-weight: 800; font-size: 0.65rem; text-transform: uppercase;">
-                            ${order.service === 'graesslaaning' ? '🌱 Græs' : '❄️ Sne'}
-                        </span>
-                    </td>
-                    <td style="padding: 15px;">
-                        <div style="font-size: 0.85rem;">${order.email}</div>
-                        <div style="font-size: 0.75rem; color: #888;">${order.phone}</div>
-                    </td>
-                    <td style="padding: 15px; font-size: 0.8rem; color: #666;">${order.address}</td>
-                    <td style="padding: 15px; text-align: right;">
-                        <button onclick="deleteOrder('${order.id}')" style="background: #fff; color: #ff4d4d; border: 1px solid #ff4d4d; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: 700; font-size: 0.7rem; transition: all 0.2s ease;">SLET</button>
-                    </td>
-                </tr>
-            `).join('');
+            tbody.innerHTML = orders.map(order => {
+                // Håndter manglende 'time' kolonne ved at tjekke beskrivelsen
+                let displayTime = order.time || '-';
+                let displayDescription = order.description || '';
+                
+                if (!order.time && displayDescription.startsWith('[Tid:')) {
+                    const match = displayDescription.match(/\[Tid:\s*([^\]]+)\]/);
+                    if (match) {
+                        displayTime = match[1];
+                        displayDescription = displayDescription.replace(match[0], '').trim();
+                    }
+                }
+
+                return `
+                    <tr style="border-bottom: 1px solid #f0f0f0;">
+                        <td style="padding: 15px;">
+                            <div style="font-weight: 700; color: var(--dark-green);">${order.date || '-'}</div>
+                            <div style="font-size: 0.75rem; color: #999;">kl. ${displayTime}</div>
+                        </td>
+                        <td style="padding: 15px; font-weight: 700;">${order.name}</td>
+                        <td style="padding: 15px;">
+                            <span style="background: rgba(26, 48, 32, 0.08); color: var(--dark-green); padding: 4px 10px; border-radius: 4px; font-weight: 800; font-size: 0.65rem; text-transform: uppercase;">
+                                ${order.service === 'graesslaaning' ? '🌱 Græs' : '❄️ Sne'}
+                            </span>
+                        </td>
+                        <td style="padding: 15px;">
+                            <div style="font-size: 0.85rem;">${order.email}</div>
+                            <div style="font-size: 0.75rem; color: #888;">${order.phone}</div>
+                        </td>
+                        <td style="padding: 15px; font-size: 0.8rem; color: #666;">
+                            <div>${order.address}</div>
+                            <div style="font-size: 0.7rem; color: #aaa; margin-top: 5px; font-style: italic;">${displayDescription}</div>
+                        </td>
+                        <td style="padding: 15px; text-align: right;">
+                            <button onclick="deleteOrder('${order.id}')" style="background: #fff; color: #ff4d4d; border: 1px solid #ff4d4d; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: 700; font-size: 0.7rem; transition: all 0.2s ease;">SLET</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
         }
 
         function deleteOrder(id) {
