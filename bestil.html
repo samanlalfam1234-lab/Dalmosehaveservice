@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bestil - Dalmose Haveservice</title>
+    <link rel="icon" type="image/png" href="image_2026-03-06_153044943-removebg-preview.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-client.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <img src="image_2026-03-06_153044943-removebg-preview.png" alt="Dalmose Haveservice Logo" class="logo-img">
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html" class="nav-cta">Forside</a></li>
+                    <li><a href="ydelser.html" class="nav-cta">Vores services</a></li>
+                    <li><a href="priser.html" class="nav-cta">Priser</a></li>
+                    <li><a href="om-os.html" class="nav-cta">Om os</a></li>
+                    <li><a href="bestil.html" class="nav-cta">Bestil</a></li>
+                    <li id="loginWrapper"><a href="login.html" class="nav-cta btn-outline">Log ind</a></li>
+                    <li id="logoutWrapper" style="display: none;"><a href="#" id="logoutBtn" class="nav-cta btn-logout">Log ud</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero-small">
+        <div class="container">
+            <span class="hero-brand">Dalmose Haveservice</span>
+            <h1 class="main-title">Bestil haveservice</h1>
+            <p>Fortæl os om din opgave, så vender vi hurtigt tilbage med et uforpligtende tilbud.</p>
+        </div>
+    </section>
+
+    <section id="bestil" class="order-section">
+        <div class="container-small">
+            <div class="order-container">
+                <form class="contact-form" id="orderForm">
+                    <input type="text" placeholder="Navn" required>
+                    <input type="email" placeholder="Email" required>
+                    <input type="tel" placeholder="Telefonnummer" required>
+                    <input type="text" placeholder="Adresse (Vej, Nr, By)" required>
+                    
+                    <div class="form-group">
+                        <label>Vælg service</label>
+                        <div class="service-selector">
+                            <input type="radio" id="graesslaaning" name="ydelse" value="graesslaaning" required>
+                            <label for="graesslaaning" class="service-tile">
+                                <span class="tile-icon">🌱</span>
+                                <span class="tile-text">Græsslåning</span>
+                            </label>
+
+                            <input type="radio" id="snerydning" name="ydelse" value="snerydning" required>
+                            <label for="snerydning" class="service-tile">
+                                <span class="tile-icon">❄️</span>
+                                <span class="tile-text">Snerydning</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="dato">Vælg dato</label>
+                            <input type="date" id="dato" name="dato" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tid">Vælg tid (15:30 - 17:00)</label>
+                            <select id="tid" name="tid" required>
+                                <option value="" disabled selected>Vælg tidspunkt...</option>
+                                <!-- Tider genereres via JS -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <textarea placeholder="Beskriv opgaven yderligere (valgfrit)..." rows="5"></textarea>
+                    <button type="submit" class="btn btn-primary btn-full">Send bestilling</button>
+                </form>
+
+                <div class="order-footer-info">
+                    <p>info@dalmosehaveservice.dk  &bull;  20 66 53 15 / 42 15 77 92</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-content">
+            <p>&copy; 2026 Dalmose Haveservice. Alle rettigheder forbeholdes.</p>
+        </div>
+    </footer>
+
+    <!-- Custom Modal -->
+    <div id="loginModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-close" onclick="document.getElementById('loginModal').style.display='none'">&times;</div>
+            <h2>Log ind påkrævet</h2>
+            <p>Du skal være logget ind for at sende en bestilling. Opret en konto på få sekunder eller log ind nu.</p>
+            <div class="modal-btns">
+                <a href="login.html" class="btn btn-dark">Log ind</a>
+                <a href="opret-konto.html" class="btn btn-primary">Opret konto</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Modal (for fejl/succes) -->
+    <div id="statusModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-close" onclick="document.getElementById('statusModal').style.display='none'">&times;</div>
+            <h2 id="statusTitle">Besked</h2>
+            <p id="statusMessage"></p>
+            <div class="modal-btns">
+                <button class="btn btn-primary" onclick="document.getElementById('statusModal').style.display='none'">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Generer tider fra 15:30 til 17:00 (Hvert minut for fuld kontrol)
+        function generateTimes() {
+            const select = document.getElementById('tid');
+            for (let h = 15; h <= 17; h++) {
+                for (let m = 0; m < 60; m++) { // Skridt på 1 minut
+                    // Start fra 15:30
+                    if (h === 15 && m < 30) continue;
+                    // Stop ved 17:01 (så 17:00 er med)
+                    if (h === 17 && m > 0) break;
+
+                    const timeStr = `${h}:${m.toString().padStart(2, '0')}`;
+                    const option = document.createElement('option');
+                    option.value = timeStr;
+                    option.textContent = timeStr;
+                    select.appendChild(option);
+                }
+            }
+        }
+        generateTimes();
+
+        // Tjek URL parametre for at forudvælge service
+        function checkURLParams() {
+            const params = new URLSearchParams(window.location.search);
+            const service = params.get('service');
+            if (service) {
+                const radio = document.getElementById(service);
+                if (radio) radio.checked = true;
+            }
+        }
+        checkURLParams();
+
+        function showStatus(title, message) {
+            document.getElementById('statusTitle').textContent = title;
+            document.getElementById('statusMessage').textContent = message;
+            document.getElementById('statusModal').style.display = 'flex';
+        }
+
+        // Vis log ud knap hvis logget ind
+        async function updateUI() {
+            const { data: { session } } = await window.supabaseClient.auth.getSession();
+            if (session) {
+                document.getElementById('loginWrapper').style.display = 'none';
+                document.getElementById('logoutWrapper').style.display = 'block';
+            }
+        }
+        updateUI();
+
+        // Tjek login ved afsendelse
+        document.getElementById('orderForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const { data: { session } } = await window.supabaseClient.auth.getSession();
+            
+            if (!session) {
+                document.getElementById('loginModal').style.display = 'flex';
+                return;
+            }
+
+            const formData = {
+                name: this.querySelector('input[placeholder="Navn"]').value,
+                email: this.querySelector('input[placeholder="Email"]').value,
+                phone: this.querySelector('input[placeholder="Telefonnummer"]').value,
+                address: this.querySelector('input[placeholder="Adresse (Vej, Nr, By)"]').value,
+                service: this.querySelector('input[name="ydelse"]:checked').value,
+                date: this.querySelector('#dato').value,
+                time: this.querySelector('#tid').value,
+                description: this.querySelector('textarea').value
+            };
+
+            const { error } = await window.supabaseClient
+                .from('orders')
+                .insert([formData]);
+
+            if (error) {
+                console.error('Fejl ved bestilling:', error);
+                showStatus("Der skete en fejl", error.message);
+                return;
+            }
+
+            showStatus("Tak!", "Vi har modtaget din bestilling og vender hurtigt tilbage.");
+            this.reset();
+        });
+
+        if (document.getElementById('logoutBtn')) {
+            document.getElementById('logoutBtn').addEventListener('click', async function(e) {
+                e.preventDefault();
+                await window.supabaseClient.auth.signOut();
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userEmail');
+                window.location.href = 'index.html';
+            });
+        }
+    </script>
+</body>
+</html>

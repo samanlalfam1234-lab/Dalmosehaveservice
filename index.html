@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dalmose Haveservice - Professionel pleje af din have</title>
+    <link rel="icon" type="image/png" href="image_2026-03-06_153044943-removebg-preview.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-client.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <img src="image_2026-03-06_153044943-removebg-preview.png" alt="Dalmose Haveservice Logo" class="logo-img">
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html" class="nav-cta">Forside</a></li>
+                    <li><a href="ydelser.html" class="nav-cta">Vores services</a></li>
+                    <li><a href="priser.html" class="nav-cta">Priser</a></li>
+                    <li><a href="om-os.html" class="nav-cta">Om os</a></li>
+                    <li><a href="bestil.html" class="nav-cta">Bestil</a></li>
+                    <li id="loginWrapper"><a href="login.html" class="nav-cta btn-outline">Log ind</a></li>
+                    <li id="logoutWrapper" style="display: none;"><a href="#" id="logoutBtn" class="nav-cta btn-logout">Log ud</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="forside" class="hero">
+        <div class="hero-bg-container">
+            <div class="hero-bg-img" style="background-image: url('bg1.jpg');"></div>
+            <div class="hero-bg-img" style="background-image: url('bg2.jpg');"></div>
+            <div class="hero-bg-img" style="background-image: url('bg3.jpg');"></div>
+            <div class="hero-bg-img" style="background-image: url('bg4.jpg');"></div>
+        </div>
+        <div class="container hero-content">
+            <span class="hero-brand">Dalmose Haveservice</span>
+            <h1 class="main-title">Vi gør din have bedre</h1>
+            <div class="hero-features">
+                <span>Billigere</span>
+                <span class="dot">•</span>
+                <span>Hurtigere</span>
+                <span class="dot">•</span>
+                <span>Bedre</span>
+            </div>
+            <p>Professionel haveservice til private og erhverv. Vi tager os af alt fra græsslåning til vedligeholdelse af dine grønne arealer.</p>
+            <div class="hero-btns">
+                <a href="bestil.html" class="btn btn-primary">Bestil nu</a>
+                <a href="ydelser.html" class="btn btn-secondary">Vores services</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="why-us">
+        <div class="container">
+            <h2 class="section-title">Hvorfor vælge os?</h2>
+            <div class="why-us-grid">
+                <div class="why-card">
+                    <div class="card-icon" style="font-size: 3rem; font-weight: 900; color: #eee; margin-bottom: 10px;">01</div>
+                    <h3>Pålidelighed</h3>
+                    <p>Vi overholder alle aftaler og kommer altid til den aftalte tid.</p>
+                </div>
+                <div class="why-card">
+                    <div class="card-icon" style="font-size: 3rem; font-weight: 900; color: #eee; margin-bottom: 10px;">02</div>
+                    <h3>Top Kvalitet</h3>
+                    <p>Vi går op i detaljerne og leverer et resultat, vi er stolte af.</p>
+                </div>
+                <div class="why-card">
+                    <div class="card-icon" style="font-size: 3rem; font-weight: 900; color: #eee; margin-bottom: 10px;">03</div>
+                    <h3>Fair Priser</h3>
+                    <p>Høj kvalitet behøver ikke koste en formue. Vi er konkurrencedygtige.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="kontakt" class="simple-contact">
+        <div class="container">
+            <h2 class="section-title">Kontakt os</h2>
+            <div class="contact-details">
+                <div class="contact-card">
+                    <span class="contact-icon">📞</span>
+                    <p>20 66 53 15 • 42 15 77 92</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-content">
+            <p>&copy; 2026 Dalmose Haveservice. Alle rettigheder forbeholdes.</p>
+        </div>
+    </footer>
+
+    <script>
+        const allowedAdmins = ['liamkurstein12@gmail.com', 'samanlalfam1234@gmail.com'];
+
+        async function initPage() {
+            const { data: { session } } = await window.supabaseClient.auth.getSession();
+            if (session) {
+                document.getElementById('loginWrapper').style.display = 'none';
+                document.getElementById('logoutWrapper').style.display = 'block';
+                
+                // Admin shortcut
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'F2' && allowedAdmins.includes(session.user.email)) {
+                        window.location.href = 'admin.html';
+                    }
+                });
+            }
+        }
+        initPage();
+
+        if (document.getElementById('logoutBtn')) {
+            document.getElementById('logoutBtn').addEventListener('click', async function(e) {
+                e.preventDefault();
+                await window.supabaseClient.auth.signOut();
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userEmail');
+                window.location.reload();
+            });
+        }
+    </script>
+</body>
+</html>

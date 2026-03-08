@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Dalmose Haveservice</title>
+    <link rel="icon" type="image/png" href="image_2026-03-06_153044943-removebg-preview.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-client.js"></script>
+</head>
+<body style="background-color: #f4f4f4;">
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <img src="image_2026-03-06_153044943-removebg-preview.png" alt="Dalmose Haveservice Logo" class="logo-img">
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html" class="nav-cta">Forside</a></li>
+                    <li><a href="#" id="logoutBtn" class="nav-cta btn-logout">Log ud</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero-small" style="background: var(--dark-green); padding: 60px 0 30px;">
+        <div class="container">
+            <span class="hero-brand" style="color: rgba(255,255,255,0.6);">Administrationspanel</span>
+            <h1 style="color: white; font-size: 2.5rem; margin-bottom: 5px;">Bestillingsoversigt</h1>
+            <p id="adminStatus" style="color: rgba(255,255,255,0.7); font-size: 0.9rem; font-weight: 400;"></p>
+        </div>
+    </section>
+
+    <main class="container" style="padding: 30px 0; display: none;" id="adminMain">
+        <div id="ordersTableWrapper" style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; min-width: 900px;">
+                <thead>
+                    <tr style="text-align: left; border-bottom: 2px solid #eee;">
+                        <th style="padding: 15px; font-weight: 800; font-size: 0.75rem; color: #888; text-transform: uppercase;">Dato & Tid</th>
+                        <th style="padding: 15px; font-weight: 800; font-size: 0.75rem; color: #888; text-transform: uppercase;">Kunde</th>
+                        <th style="padding: 15px; font-weight: 800; font-size: 0.75rem; color: #888; text-transform: uppercase;">Service</th>
+                        <th style="padding: 15px; font-weight: 800; font-size: 0.75rem; color: #888; text-transform: uppercase;">Kontakt</th>
+                        <th style="padding: 15px; font-weight: 800; font-size: 0.75rem; color: #888; text-transform: uppercase;">Adresse</th>
+                        <th style="padding: 15px; font-weight: 800; font-size: 0.75rem; color: #888; text-transform: uppercase; text-align: right;">Handling</th>
+                    </tr>
+                </thead>
+                <tbody id="ordersTableBody">
+                    <!-- Orders will be loaded here -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Modal for confirm deletion -->
+    <div id="confirmModal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 400px; padding: 40px; text-align: center;">
+            <div style="font-size: 3rem; color: #ff4d4d; margin-bottom: 20px;">⚠️</div>
+            <h2 style="color: var(--black); margin-bottom: 15px;">Slet bestilling?</h2>
+            <p style="margin-bottom: 30px; font-size: 0.95rem; color: #666;">Dette vil permanent fjerne bestillingen fra databasen.</p>
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <button id="confirmDeleteBtn" class="btn" style="background: #ff4d4d; color: white; border: none; padding: 12px 25px; border-radius: 6px; font-weight: 700; cursor: pointer;">Slet nu</button>
+                <button class="btn" onclick="document.getElementById('confirmModal').style.display='none'" style="background: #eee; color: #333; border: none; padding: 12px 25px; border-radius: 6px; font-weight: 700; cursor: pointer;">Fortryd</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Modal -->
+    <div id="statusModal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 400px; text-align: center;">
+            <h2 id="statusTitle" style="margin-bottom: 15px;">Besked</h2>
+            <p id="statusMessage" style="margin-bottom: 25px;"></p>
+            <button class="btn btn-primary" onclick="document.getElementById('statusModal').style.display='none'">Forstået</button>
+        </div>
+    </div>
+
+    <script>
+        let orderToDelete = null;
+        const allowedAdmins = ['liamkurstein12@gmail.com', 'samanlalfam1234@gmail.com'];
+
+        function showStatus(title, message) {
+            document.getElementById('statusTitle').textContent = title;
+            document.getElementById('statusMessage').textContent = message;
+            document.getElementById('statusModal').style.display = 'flex';
+        }
+
+        async function checkAccess() {
+            const { data: { session } } = await window.supabaseClient.auth.getSession();
+            if (!session || !allowedAdmins.includes(session.user.email)) {
+                window.location.href = 'index.html';
+                return;
+            }
+            document.getElementById('adminMain').style.display = 'block';
+            document.getElementById('adminStatus').textContent = 'Logget ind som: ' + session.user.email;
+            fetchOrders();
+        }
+
+        async function fetchOrders() {
+            const { data: orders, error } = await window.supabaseClient
+                .from('orders')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error('Fejl:', error);
+                return;
+            }
+
+            const tbody = document.getElementById('ordersTableBody');
+            if (!orders || orders.length === 0) {
+                tbody.innerHTML = '';
+                return;
+            }
+
+            tbody.innerHTML = orders.map(order => `
+                <tr style="border-bottom: 1px solid #f0f0f0;">
+                    <td style="padding: 15px;">
+                        <div style="font-weight: 700; color: var(--dark-green);">${order.date || '-'}</div>
+                        <div style="font-size: 0.75rem; color: #999;">kl. ${order.time || '-'}</div>
+                    </td>
+                    <td style="padding: 15px; font-weight: 700;">${order.name}</td>
+                    <td style="padding: 15px;">
+                        <span style="background: rgba(26, 48, 32, 0.08); color: var(--dark-green); padding: 4px 10px; border-radius: 4px; font-weight: 800; font-size: 0.65rem; text-transform: uppercase;">
+                            ${order.service === 'graesslaaning' ? '🌱 Græs' : '❄️ Sne'}
+                        </span>
+                    </td>
+                    <td style="padding: 15px;">
+                        <div style="font-size: 0.85rem;">${order.email}</div>
+                        <div style="font-size: 0.75rem; color: #888;">${order.phone}</div>
+                    </td>
+                    <td style="padding: 15px; font-size: 0.8rem; color: #666;">${order.address}</td>
+                    <td style="padding: 15px; text-align: right;">
+                        <button onclick="deleteOrder('${order.id}')" style="background: #fff; color: #ff4d4d; border: 1px solid #ff4d4d; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: 700; font-size: 0.7rem; transition: all 0.2s ease;">SLET</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function deleteOrder(id) {
+            orderToDelete = id;
+            document.getElementById('confirmModal').style.display = 'flex';
+        }
+
+        document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
+            if (!orderToDelete) return;
+            const { error } = await window.supabaseClient.from('orders').delete().eq('id', orderToDelete);
+            document.getElementById('confirmModal').style.display = 'none';
+            if (error) {
+                showStatus('Fejl', 'Kunne ikke slette: ' + error.message);
+            } else {
+                fetchOrders();
+            }
+            orderToDelete = null;
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            await window.supabaseClient.auth.signOut();
+            window.location.href = 'index.html';
+        });
+
+        checkAccess();
+    </script>
+</body>
+</html>

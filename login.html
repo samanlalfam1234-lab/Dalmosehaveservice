@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log ind - Dalmose Haveservice</title>
+    <link rel="icon" type="image/png" href="image_2026-03-06_153044943-removebg-preview.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <img src="image_2026-03-06_153044943-removebg-preview.png" alt="Dalmose Haveservice Logo" class="logo-img">
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html" class="nav-cta">Forside</a></li>
+                    <li><a href="ydelser.html" class="nav-cta">Vores services</a></li>
+                    <li><a href="priser.html" class="nav-cta">Priser</a></li>
+                    <li><a href="om-os.html" class="nav-cta">Om os</a></li>
+                    <li><a href="bestil.html" class="nav-cta">Bestil</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <script src="supabase-client.js"></script>
+
+    <section class="login-section">
+        <div class="container-small">
+            <div class="login-container">
+                <div class="login-header">
+                    <span class="hero-brand">Dalmose Haveservice</span>
+                    <h1 style="font-size: 3rem; font-weight: 900; margin-bottom: 10px;">Log ind</h1>
+                    <p style="font-weight: 400; opacity: 0.7;">Du skal være logget ind for at bestille haveservice.</p>
+                </div>
+                
+                <form class="contact-form" id="loginForm">
+                    <input type="email" id="email" placeholder="Email" required>
+                    <input type="password" id="password" placeholder="Adgangskode (valgfri)" required>
+                    <button type="submit" class="btn btn-primary btn-full">Log ind</button>
+                </form>
+                
+                <div class="login-footer">
+                    <p>Har du ikke en konto? <a href="opret-konto.html" style="color: var(--dark-green); font-weight: 700;">Opret konto her</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-content">
+            <p>&copy; 2026 Dalmose Haveservice. Alle rettigheder forbeholdes.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            const { data, error } = await window.supabaseClient.auth.signInWithPassword({
+                email: email,
+                password: password,
+            });
+
+            if (error) {
+                alert("Fejl ved login: " + error.message);
+            } else {
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('userEmail', email);
+                window.location.href = 'bestil.html';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Priser - Dalmose Haveservice</title>
+    <link rel="icon" type="image/png" href="image_2026-03-06_153044943-removebg-preview.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-client.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <img src="image_2026-03-06_153044943-removebg-preview.png" alt="Dalmose Haveservice Logo" class="logo-img">
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html" class="nav-cta">Forside</a></li>
+                    <li><a href="ydelser.html" class="nav-cta">Vores services</a></li>
+                    <li><a href="priser.html" class="nav-cta">Priser</a></li>
+                    <li><a href="om-os.html" class="nav-cta">Om os</a></li>
+                    <li><a href="bestil.html" class="nav-cta">Bestil</a></li>
+                    <li id="loginWrapper"><a href="login.html" class="nav-cta btn-outline">Log ind</a></li>
+                    <li id="logoutWrapper" style="display: none;"><a href="#" id="logoutBtn" class="nav-cta btn-logout">Log ud</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero-small">
+        <div class="container">
+            <span class="hero-brand">Dalmose Haveservice</span>
+            <h1 class="main-title">Vores Priser</h1>
+            <p>Gennemsigtige priser uden skjulte gebyrer. Vælg den løsning, der passer bedst til din have.</p>
+        </div>
+    </section>
+
+    <section class="pricing standalone-pricing">
+        <div class="container">
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Enkeltbesøg</h3>
+                        <p class="price-desc">Perfekt til hurtig hjælp</p>
+                    </div>
+                    <div class="price-body">
+                        <div class="price-item">
+                            <span class="label">Første gang</span>
+                            <span class="amount">84,99 kr</span>
+                        </div>
+                        <div class="price-item">
+                            <span class="label">Derefter</span>
+                            <span class="amount">99,99 kr</span>
+                            <span class="unit">pr. gang</span>
+                        </div>
+                    </div>
+                    <a href="bestil.html" class="btn btn-dark btn-full">Bestil nu</a>
+                </div>
+
+                <div class="pricing-card featured">
+                    <div class="badge">Bedste tilbud</div>
+                    <div class="pricing-header">
+                        <h3>Abonnement</h3>
+                        <p class="price-desc">Fuld service hele måneden</p>
+                    </div>
+                    <div class="price-display">
+                        <span class="amount">149,99 kr</span>
+                        <span class="unit">pr. måned</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Op til 3 gange om måneden</li>
+                        <li>Fast vedligeholdelse</li>
+                        <li>Ingen skjulte gebyrer</li>
+                        <li>Altid prioriteret</li>
+                    </ul>
+                    <a href="bestil.html" class="btn btn-primary btn-full">Vælg abonnement</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-content">
+            <p>&copy; 2026 Dalmose Haveservice. Alle rettigheder forbeholdes.</p>
+        </div>
+    </footer>
+
+    <script>
+        async function updateUI() {
+            const { data: { session } } = await window.supabaseClient.auth.getSession();
+            if (session) {
+                document.getElementById('loginWrapper').style.display = 'none';
+                document.getElementById('logoutWrapper').style.display = 'block';
+            }
+        }
+        updateUI();
+
+        if (document.getElementById('logoutBtn')) {
+            document.getElementById('logoutBtn').addEventListener('click', async function(e) {
+                e.preventDefault();
+                await window.supabaseClient.auth.signOut();
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userEmail');
+                window.location.reload();
+            });
+        }
+    </script>
+</body>
+</html>

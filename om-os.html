@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Om os - Dalmose Haveservice</title>
+    <link rel="icon" type="image/png" href="image_2026-03-06_153044943-removebg-preview.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-client.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <img src="image_2026-03-06_153044943-removebg-preview.png" alt="Dalmose Haveservice Logo" class="logo-img">
+                </a>
+                <ul class="nav-links">
+                    <li><a href="index.html" class="nav-cta">Forside</a></li>
+                    <li><a href="ydelser.html" class="nav-cta">Vores services</a></li>
+                    <li><a href="priser.html" class="nav-cta">Priser</a></li>
+                    <li><a href="om-os.html" class="nav-cta">Om os</a></li>
+                    <li><a href="bestil.html" class="nav-cta">Bestil</a></li>
+                    <li id="loginWrapper"><a href="login.html" class="nav-cta btn-outline">Log ind</a></li>
+                    <li id="logoutWrapper" style="display: none;"><a href="#" id="logoutBtn" class="nav-cta btn-logout">Log ud</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero-small">
+        <div class="container">
+            <span class="hero-brand">Dalmose Haveservice</span>
+            <h1 class="main-title">Om Dalmose Haveservice</h1>
+            <p>Lær mere om hvem vi er, og hvad vi står for.</p>
+        </div>
+    </section>
+
+    <section class="about-clean">
+        <div class="container">
+            <div class="about-header">
+                <span class="subtitle">Historien bag</span>
+                <h2>Kvalitet og pålidelighed i hver eneste have</h2>
+            </div>
+            
+            <div class="about-main-text">
+                <p>Dalmose Haveservice blev grundlagt med en vision om at levere professionel haveservice af højeste kvalitet til både private og erhvervskunder. Vi forstår, at din have er et frirum, og vi sætter en ære i at holde den smuk og velplejet.</p>
+                <p>Uanset om det er den lille villahave eller de store grønne arealer ved erhvervsejendomme, så har vi udstyret og ekspertisen til at løse opgaven. Vi lægger vægt på pålidelighed, grundighed og den gode dialog med vores kunder.</p>
+            </div>
+
+            <div class="about-values-clean">
+                <div class="value-box">
+                    <div class="value-num">01</div>
+                    <h3>Kvalitet</h3>
+                    <p>Vi går aldrig på kompromis med resultatet. Hver detalje tæller.</p>
+                </div>
+                <div class="value-box">
+                    <div class="value-num">02</div>
+                    <h3>Pålidelighed</h3>
+                    <p>En aftale er en aftale. Vi kommer som aftalt og overholder tidsplanen.</p>
+                </div>
+                <div class="value-box">
+                    <div class="value-num">03</div>
+                    <h3>Gennemsigtighed</h3>
+                    <p>Fair priser og klar kommunikation uden ubehagelige overraskelser.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-content">
+            <p>&copy; 2026 Dalmose Haveservice. Alle rettigheder forbeholdes.</p>
+        </div>
+    </footer>
+
+    <script>
+        async function updateUI() {
+            const { data: { session } } = await window.supabaseClient.auth.getSession();
+            if (session) {
+                document.getElementById('loginWrapper').style.display = 'none';
+                document.getElementById('logoutWrapper').style.display = 'block';
+            }
+        }
+        updateUI();
+
+        if (document.getElementById('logoutBtn')) {
+            document.getElementById('logoutBtn').addEventListener('click', async function(e) {
+                e.preventDefault();
+                await window.supabaseClient.auth.signOut();
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userEmail');
+                window.location.reload();
+            });
+        }
+    </script>
+</body>
+</html>
