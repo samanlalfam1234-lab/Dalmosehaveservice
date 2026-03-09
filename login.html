@@ -71,14 +71,14 @@
             });
 
             if (error) {
-                if (window.showToast) {
-                    window.showToast("Fejl ved login: " + error.message, "error");
+                if (window.showNotification) {
+                    window.showNotification("Fejl ved login: " + error.message, true);
                 }
             } else {
                 localStorage.setItem('isLoggedIn', 'true');
                 localStorage.setItem('userEmail', email);
-                if (window.showToast) {
-                    window.showToast("Du er nu logget ind!");
+                if (window.showNotification) {
+                    window.showNotification("Du er nu logget ind!");
                     setTimeout(() => {
                         window.location.href = 'bestil.html';
                     }, 1500);

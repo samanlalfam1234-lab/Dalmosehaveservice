@@ -209,14 +209,17 @@
 
             if (error) {
                 console.error('Fejl ved bestilling:', error);
-                if (window.showToast) {
-                    window.showToast("Fejl ved bestilling: " + error.message, "error");
+                if (window.showNotification) {
+                    window.showNotification("Fejl ved bestilling: " + error.message, true);
                 }
                 showStatus("Der skete en fejl", error.message + " (Sørg for at 'orders' tabellen er oprettet i Supabase med de rigtige kolonner og RLS er slået fra/sat til public)");
                 return;
             }
 
             console.log('Bestilling gemt succesfuldt!');
+            if (window.showNotification) {
+                window.showNotification("Bestilling modtaget!");
+            }
             showStatus("Tak!", "Vi har modtaget din bestilling og vender hurtigt tilbage.");
             this.reset();
         });
