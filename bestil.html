@@ -209,7 +209,9 @@
 
             if (error) {
                 console.error('Fejl ved bestilling:', error);
-                alert("Bestilling fejlede! Tjek konsollen (F12) for detaljer.\nFejl: " + error.message);
+                if (window.showToast) {
+                    window.showToast("Fejl ved bestilling: " + error.message, "error");
+                }
                 showStatus("Der skete en fejl", error.message + " (Sørg for at 'orders' tabellen er oprettet i Supabase med de rigtige kolonner og RLS er slået fra/sat til public)");
                 return;
             }

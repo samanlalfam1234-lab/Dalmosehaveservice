@@ -33,3 +33,27 @@ document.addEventListener('keydown', async function(e) {
         }
     }
 });
+
+// Global clean notification function
+window.showNotification = function(message, isError = false) {
+    // Remove existing if any
+    const existing = document.querySelector('.toast-notification');
+    if (existing) existing.remove();
+
+    const toast = document.createElement('div');
+    toast.className = `toast-notification ${isError ? 'error' : ''}`;
+    toast.innerHTML = `
+        <span class="toast-icon">${isError ? '⚠️' : '✅'}</span>
+        <span class="toast-message">${message}</span>
+    `;
+    document.body.appendChild(toast);
+
+    // Trigger animation
+    setTimeout(() => toast.classList.add('active'), 10);
+
+    // Hide after 3 seconds
+    setTimeout(() => {
+        toast.classList.remove('active');
+        setTimeout(() => toast.remove(), 500);
+    }, 3000);
+};

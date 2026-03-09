@@ -71,14 +71,22 @@
             });
 
             if (error) {
-                alert("Fejl ved oprettelse: " + error.message);
+                if (window.showToast) {
+                    window.showToast("Fejl ved oprettelse: " + error.message, "error");
+                }
             } else {
                 // Gem login status og email ligesom i login.html
                 localStorage.setItem('isLoggedIn', 'true');
                 localStorage.setItem('userEmail', email);
                 
-                alert("Konto oprettet! Du er nu logget ind.");
-                window.location.href = 'bestil.html';
+                if (window.showToast) {
+                    window.showToast("Konto oprettet! Du er nu logget ind.");
+                    setTimeout(() => {
+                        window.location.href = 'bestil.html';
+                    }, 1500);
+                } else {
+                    window.location.href = 'bestil.html';
+                }
             }
         });
     </script>
