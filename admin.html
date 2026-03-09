@@ -59,17 +59,6 @@
                 </tbody>
             </table>
         </div>
-        
-        <div id="rlsWarning" style="display: none; margin-top: 30px; padding: 25px; background: #fff5f5; border-left: 5px solid #ff4d4d; border-radius: 8px;">
-            <h3 style="color: #d32f2f; margin-bottom: 10px;">🛡️ Er dine RLS-regler sat rigtigt?</h3>
-            <p style="font-size: 0.9rem; color: #666; font-weight: 400;">Hvis du lige har lavet en bestilling og den ikke dukker op, kan det skyldes at din Supabase-tabel ikke tillader "Select" eller "Insert" endnu.</p>
-            <ol style="margin-top: 15px; font-size: 0.85rem; color: #444; font-weight: 600;">
-                <li>Gå til Supabase Dashboard > Table Editor > orders</li>
-                <li>Tjek om tabellen er tom (hvis ja, fejlede din bestilling i <code>bestil.html</code>)</li>
-                <li>Gå til Authentication > Policies > orders</li>
-                <li>Sørg for at "Enable RLS" er slået FRA for nemmest test, eller tilføj en policy der tillader "ALL" for alle brugere.</li>
-            </ol>
-        </div>
     </main>
 
     <!-- Modal for confirm deletion -->
@@ -148,15 +137,11 @@
             }
 
             const tbody = document.getElementById('ordersTableBody');
-            const rlsWarning = document.getElementById('rlsWarning');
 
             if (!orders || orders.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="6" style="padding: 40px; text-align: center; color: #888;">Ingen bestillinger fundet i databasen.</td></tr>';
-                rlsWarning.style.display = 'block';
                 return;
             }
-            
-            rlsWarning.style.display = 'none';
 
             tbody.innerHTML = orders.map(order => {
                 // Håndter manglende 'time' kolonne ved at tjekke beskrivelsen
