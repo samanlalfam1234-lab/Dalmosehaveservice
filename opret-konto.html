@@ -73,7 +73,12 @@
             if (error) {
                 alert("Fejl ved oprettelse: " + error.message);
             } else {
-                window.location.href = 'login.html';
+                // Gem login status og email ligesom i login.html
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('userEmail', email);
+                
+                alert("Konto oprettet! Du er nu logget ind.");
+                window.location.href = 'bestil.html';
             }
         });
     </script>
