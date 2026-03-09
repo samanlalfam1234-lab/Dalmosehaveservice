@@ -85,7 +85,7 @@
                 </form>
 
                 <div class="order-footer-info">
-                    <p>info@dalmosenaturservice.dk  &bull;  20 66 53 15 / 42 15 77 92</p>
+                    <p>20 66 53 15 / 42 15 77 92</p>
                 </div>
             </div>
         </div>
@@ -123,11 +123,11 @@
     </div>
 
     <script>
-        // Generer tider fra 15:30 til 17:00 (Hvert minut for fuld kontrol)
+        // Generer tider fra 15:30 til 17:00 (Hvert 5. minut)
         function generateTimes() {
             const select = document.getElementById('tid');
             for (let h = 15; h <= 17; h++) {
-                for (let m = 0; m < 60; m++) { // Skridt på 1 minut
+                for (let m = 0; m < 60; m += 5) { // Skridt på 5 minutter
                     // Start fra 15:30
                     if (h === 15 && m < 30) continue;
                     // Stop ved 17:01 (så 17:00 er med)
