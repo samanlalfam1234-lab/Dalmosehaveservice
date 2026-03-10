@@ -19,6 +19,11 @@
                 <a href="index.html" class="logo">
                     <img src="image_2026-03-06_153044943-removebg-preview.png" alt="Dalmose Naturservice Logo" class="logo-img">
                 </a>
+                <div class="menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
                 <ul class="nav-links">
                     <li><a href="index.html" class="nav-cta">Forside</a></li>
                     <li><a href="ydelser.html" class="nav-cta">Vores services</a></li>
@@ -85,15 +90,6 @@
     </footer>
 
     <script>
-        async function updateUI() {
-            const { data: { session } } = await window.supabaseClient.auth.getSession();
-            if (session) {
-                document.getElementById('loginWrapper').style.display = 'none';
-                document.getElementById('logoutWrapper').style.display = 'block';
-            }
-        }
-        updateUI();
-
         if (document.getElementById('logoutBtn')) {
             document.getElementById('logoutBtn').addEventListener('click', async function(e) {
                 e.preventDefault();

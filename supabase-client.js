@@ -24,6 +24,42 @@ window.isAdmin = function(email) {
     return adminEmails.includes(normalized) || adminEmails.includes(email.trim().toLowerCase());
 };
 
+// Global Mobile Menu Logic
+document.addEventListener('DOMContentLoaded', () => {
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+
+    if (menuToggle && navLinks) {
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu when clicking a link
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggle.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+    }
+
+    // Handle Login/Logout visibility globally
+    const loginWrapper = document.getElementById('loginWrapper');
+    const logoutWrapper = document.getElementById('logoutWrapper');
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+    if (loginWrapper && logoutWrapper) {
+        if (isLoggedIn) {
+            loginWrapper.style.display = 'none';
+            logoutWrapper.style.display = 'block';
+        } else {
+            loginWrapper.style.display = 'block';
+            logoutWrapper.style.display = 'none';
+        }
+    }
+});
+
 // Admin shortcut (F2) - Works globally on all pages importing this script
 document.addEventListener('keydown', async function(e) {
     if (e.key === 'F2') {

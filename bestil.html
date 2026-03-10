@@ -19,6 +19,11 @@
                 <a href="index.html" class="logo">
                     <img src="image_2026-03-06_153044943-removebg-preview.png" alt="Dalmose Naturservice Logo" class="logo-img">
                 </a>
+                <div class="menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
                 <ul class="nav-links">
                     <li><a href="index.html" class="nav-cta">Forside</a></li>
                     <li><a href="ydelser.html" class="nav-cta">Vores services</a></li>
@@ -230,7 +235,7 @@
                 await window.supabaseClient.auth.signOut();
                 localStorage.removeItem('isLoggedIn');
                 localStorage.removeItem('userEmail');
-                window.location.href = 'index.html';
+                window.location.reload();
             });
         }
     </script>
