@@ -35,6 +35,9 @@
 
 html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
+    width: 100%;
+    touch-action: manipulation;
 }
 
 body {
@@ -43,8 +46,11 @@ body {
     color: var(--black);
     background-color: var(--white);
     overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
     font-weight: 500;
-    -webkit-text-size-adjust: 100%; /* Prevent automatic font scaling */
+    -webkit-text-size-adjust: 100%;
+    touch-action: pan-y;
 }
 
 /* Prevent blue phone links on mobile */
@@ -153,11 +159,11 @@ nav {
 }
 
 .nav-cta {
-    border: 1px solid rgba(255,255,255,0.15);
+    border: 2px solid rgba(255,255,255,0.3);
     padding: 10px 22px !important;
     opacity: 1 !important;
     border-radius: 2px;
-    background: rgba(255,255,255,0.02);
+    background: rgba(255,255,255,0.05);
 }
 
 .nav-cta::after {
@@ -242,7 +248,19 @@ nav {
     height: 100%;
     background-size: cover;
     background-position: center;
-    filter: brightness(0.4);
+    filter: brightness(0.5);
+    transition: filter 0.8s ease;
+}
+
+.hero::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(26, 48, 32, 0.4) 0%, rgba(0,0,0,0.6) 100%);
+    z-index: 2;
 }
 
 @keyframes heroSlide {
@@ -377,7 +395,7 @@ nav {
 
 .btn-secondary {
     background: transparent;
-    border: 1px solid var(--white);
+    border: 2px solid var(--white);
     color: var(--white);
 }
 
@@ -661,16 +679,16 @@ nav {
     text-align: center;
     padding: 60px 30px;
     background: var(--white);
-    border: 1px solid #f0f0f0;
-    border-radius: 0;
+    border: 2px solid var(--dark-green);
+    border-radius: 2px;
     transition: var(--transition);
     position: relative;
 }
 
 .why-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 30px 60px rgba(0,0,0,0.05);
-    border-color: var(--dark-green);
+    transform: translateY(-10px);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.1);
+    background: var(--off-white);
 }
 
 .card-icon {
@@ -915,16 +933,18 @@ nav {
 }
 
 .contact-card {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
     padding: 30px;
-    border-radius: 12px;
+    border-radius: 4px;
     min-width: 280px;
     transition: var(--transition);
+    border: 1px solid rgba(255,255,255,0.2);
 }
 
 .contact-card:hover {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.1);
     transform: translateY(-5px);
+    border-color: var(--white);
 }
 
 .contact-icon {
@@ -1433,57 +1453,66 @@ footer p {
 
     .hero { min-height: 80vh; padding: 60px 0; }
     .hero-brand { font-size: 0.8rem; letter-spacing: 3px; margin-bottom: 15px; }
-    .hero h1 { font-size: 2.4rem; letter-spacing: -1px; }
-    .hero p { font-size: 1rem; line-height: 1.5; margin-bottom: 35px; }
+    .hero h1 { font-size: 2.2rem; letter-spacing: -1px; margin-bottom: 20px; }
+    .hero p { font-size: 0.95rem; line-height: 1.5; margin-bottom: 30px; }
     
     .why-us-grid {
         display: flex;
         overflow-x: auto;
         scroll-snap-type: x mandatory;
-        gap: 20px;
-        padding: 10px 20px 40px;
-        margin: 0 -20px;
+        gap: 15px;
+        padding: 10px 15px 30px;
+        margin: 0 -15px;
         scrollbar-width: none;
+        -ms-overflow-style: none;
     }
+    .why-us-grid::-webkit-scrollbar { display: none; }
+    
     .why-card {
         min-width: 85%;
         scroll-snap-align: center;
-        border: 1px solid #eee;
+        border: 2px solid var(--dark-green);
         background: #fff;
-        padding: 40px 30px;
+        padding: 30px 20px;
+        border-radius: 4px;
     }
 
-    .section-title { font-size: 1.6rem; margin-bottom: 40px; }
+    .section-title { font-size: 1.5rem; margin-bottom: 30px; }
     .services-grid { grid-template-columns: 1fr; }
-    .service-detailed { gap: 30px; }
-    .service-text h2 { font-size: 2rem; }
+    .service-detailed { gap: 20px; margin-bottom: 60px; }
+    .service-text h2 { font-size: 1.8rem; }
     
-    .contact-wrapper { grid-template-columns: 1fr; gap: 40px; }
+    .contact-wrapper { grid-template-columns: 1fr; gap: 30px; }
     .form-row { grid-template-columns: 1fr; gap: 0; }
     
-    .pricing-grid { gap: 20px; }
-    .pricing-card { min-width: 100%; }
-    .pricing-card.featured { transform: scale(1); }
+    .pricing-grid { gap: 15px; }
+    .pricing-card { min-width: 100%; border: 2px solid var(--dark-green); }
+    .pricing-card.featured { transform: scale(1); border-width: 3px; }
 
-    .about-header h2 { font-size: 2.2rem; }
-    .about-main-text p { font-size: 1.1rem; }
+    .about-header h2 { font-size: 1.8rem; line-height: 1.2; }
+    .about-main-text p { font-size: 1rem; line-height: 1.6; }
     
-    .hero-image-strip { height: 250px; }
+    .hero-small { padding: 80px 0 60px; }
+    .hero-small h1 { font-size: 2.2rem; }
+    
+    .hero-image-strip { height: 180px; }
     .hero-img-item:hover { flex: 1; }
 
     .hero-features {
-        flex-direction: column;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
         gap: 10px;
-        align-items: center;
+        font-size: 0.7rem;
     }
 
-    .hero-features .dot { display: none; }
+    .hero-features .dot { display: inline-block; opacity: 0.5; }
 
-    .login-container, .order-container { padding: 40px 20px; }
-    .login-header h1 { font-size: 2rem; }
+    .login-container, .order-container { padding: 30px 15px; border: 2px solid var(--dark-green); }
+    .login-header h1 { font-size: 1.8rem; }
     
     .container { padding: 0 15px; }
-    .logo-img { height: 50px; }
+    .logo-img { height: 45px; }
 
     /* Admin specific mobile fixes */
     .hero-small .container {
