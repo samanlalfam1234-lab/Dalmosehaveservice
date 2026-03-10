@@ -45,19 +45,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Handle Login/Logout visibility globally
-    const loginWrapper = document.getElementById('loginWrapper');
-    const logoutWrapper = document.getElementById('logoutWrapper');
-    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    const updateAuthUI = async () => {
+        const loginWrapper = document.getElementById('loginWrapper');
+        const logoutWrapper = document.getElementById('logoutWrapper');
+        if (!loginWrapper || !logoutWrapper) return;
 
-    if (loginWrapper && logoutWrapper) {
-        if (isLoggedIn) {
+        const { data: { session } } = await window.supabaseClient.auth.getSession();
+        
+        if (session) {
             loginWrapper.style.display = 'none';
             logoutWrapper.style.display = 'block';
         } else {
             loginWrapper.style.display = 'block';
             logoutWrapper.style.display = 'none';
         }
-    }
+    };
+
+    updateAuthUI();
+
+    // Listen for auth changes
+    window.supabaseClient.auth.onAuthStateChange(() => {
+        updateAuthUI();
+    });
 });
 
 // Admin shortcut (F2) - Works globally on all pages importing this script
