@@ -236,15 +236,15 @@ nav {
     position: absolute;
     top: 0;
     left: 0;
-    width: 400%;
+    width: 300%;
     height: 100%;
     display: flex;
     z-index: 1;
-    animation: heroSlide 24s infinite cubic-bezier(0.4, 0, 0.2, 1);
+    animation: heroSlide 18s infinite cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .hero-bg-img {
-    width: 25%;
+    width: 33.333%;
     height: 100%;
     background-size: cover;
     background-position: center;
@@ -264,10 +264,9 @@ nav {
 }
 
 @keyframes heroSlide {
-    0%, 20% { transform: translateX(0); }
-    25%, 45% { transform: translateX(-25%); }
-    50%, 70% { transform: translateX(-50%); }
-    75%, 95% { transform: translateX(-75%); }
+    0%, 30% { transform: translateX(0); }
+    33%, 63% { transform: translateX(-33.333%); }
+    66%, 96% { transform: translateX(-66.666%); }
     100% { transform: translateX(0); }
 }
 
