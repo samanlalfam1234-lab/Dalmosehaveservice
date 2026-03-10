@@ -67,6 +67,22 @@ document.addEventListener('DOMContentLoaded', () => {
     window.supabaseClient.auth.onAuthStateChange(() => {
         updateAuthUI();
     });
+
+    // Scroll Reveal Logic
+    const reveal = () => {
+        const reveals = document.querySelectorAll('.reveal');
+        reveals.forEach(el => {
+            const windowHeight = window.innerHeight;
+            const revealTop = el.getBoundingClientRect().top;
+            const revealPoint = 100;
+            if (revealTop < windowHeight - revealPoint) {
+                el.classList.add('active');
+            }
+        });
+    };
+
+    window.addEventListener('scroll', reveal);
+    reveal(); // Run once on load
 });
 
 // Admin shortcut (F2) - Works globally on all pages importing this script
