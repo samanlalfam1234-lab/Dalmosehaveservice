@@ -1588,15 +1588,17 @@ footer p {
     /* Buttons */
     .btn {
         width: 100%;
-        max-width: 260px;
+        max-width: 280px;
         text-align: center;
-        padding: 14px 25px !important;
+        padding: 16px 25px !important;
         font-size: 1rem;
         display: flex;
         justify-content: center;
         align-items: center;
         margin-left: auto;
         margin-right: auto;
+        white-space: nowrap;
+        border-radius: 4px;
     }
 
     .hero-btns .btn { margin: 0; }
@@ -1605,7 +1607,12 @@ footer p {
     .service-text h2 { text-align: left !important; }
     .service-text p { text-align: left !important; }
     .service-detailed { text-align: left !important; }
-    .service-detailed .btn { justify-content: center; text-align: center !important; margin: 0; }
+    .service-detailed .btn { 
+        justify-content: center; 
+        text-align: center !important; 
+        margin: 20px auto 0;
+        display: flex;
+    }
 
     .modal-content {
         padding: 40px 20px;
