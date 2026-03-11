@@ -1589,20 +1589,17 @@ footer p {
     .btn {
         width: 100%;
         max-width: 260px;
-        text-align: left !important;
+        text-align: center;
         padding: 14px 25px !important;
         font-size: 1rem;
         display: flex;
-        justify-content: flex-start;
+        justify-content: center;
         align-items: center;
     }
 
     .service-text { text-align: left !important; }
-    .service-text h2 { text-align: left !important; }
     .service-text p { text-align: left !important; }
     .service-detailed { text-align: left !important; }
-    .text-center { text-align: left !important; }
-    .service-list { display: block !important; }
 
     .modal-content {
         padding: 40px 20px;
