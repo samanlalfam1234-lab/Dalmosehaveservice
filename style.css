@@ -103,12 +103,17 @@ nav {
     order: 1;
 }
 
+img {
+    object-fit: cover;
+    image-rendering: auto; /* Forhindrer pixelering ved at bruge standard-udjævning */
+}
+
 .logo-img {
     height: 60px;
     width: auto;
     display: block;
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
+    filter: drop-shadow(0 0 10px rgba(0,0,0,0.2));
+    transition: var(--transition);
 }
 
 .logo:hover {
@@ -1107,10 +1112,16 @@ nav {
     margin-bottom: 30px;
 }
 
+.text-center {
+    text-align: center;
+}
+
 .service-list {
     list-style: none;
     padding: 0;
     margin-bottom: 40px;
+    display: inline-block;
+    text-align: left;
 }
 
 .service-list li {
@@ -1136,29 +1147,18 @@ nav {
     align-items: center;
 }
 
-.service-placeholder {
+.service-img {
     width: 100%;
     aspect-ratio: 16/9;
-    background: linear-gradient(135deg, #f9f9f9 0%, #ffffff 100%);
-    border-radius: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 8rem;
-    border: 1px solid #eee;
+    border-radius: 8px;
+    border: 3px solid var(--dark-green);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
     transition: var(--transition);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.02);
 }
 
-.service-placeholder span {
-    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));
-}
-
-.service-detailed:hover .service-placeholder {
+.service-detailed:hover .service-img {
     transform: scale(1.02);
-    border-color: var(--primary-color);
-    background: var(--white);
-    box-shadow: 0 30px 60px rgba(0,0,0,0.05);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.15);
 }
 
 @media (max-width: 992px) {
