@@ -68,22 +68,22 @@
 
     <!-- Modal for confirm deletion -->
     <div id="confirmModal" class="modal-overlay">
-        <div class="modal-content">
+        <div class="modal-content" style="max-width: 400px; padding: 40px; text-align: center;">
             <div style="font-size: 3rem; color: #ff4d4d; margin-bottom: 20px;">⚠️</div>
-            <h2>Slet bestilling?</h2>
-            <p>Dette vil permanent fjerne bestillingen fra databasen.</p>
-            <div class="modal-btns" style="flex-direction: row; gap: 15px;">
-                <button id="confirmDeleteBtn" class="btn" style="background: #ff4d4d; color: white; border: none; flex: 1;">Slet nu</button>
-                <button class="btn" onclick="document.getElementById('confirmModal').style.display='none'" style="background: #eee; color: #333; border: none; flex: 1;">Fortryd</button>
+            <h2 style="color: var(--black); margin-bottom: 15px;">Slet bestilling?</h2>
+            <p style="margin-bottom: 30px; font-size: 0.95rem; color: #666;">Dette vil permanent fjerne bestillingen fra databasen.</p>
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <button id="confirmDeleteBtn" class="btn" style="background: #ff4d4d; color: white; border: none; padding: 12px 25px; border-radius: 6px; font-weight: 700; cursor: pointer;">Slet nu</button>
+                <button class="btn" onclick="document.getElementById('confirmModal').style.display='none'" style="background: #eee; color: #333; border: none; padding: 12px 25px; border-radius: 6px; font-weight: 700; cursor: pointer;">Fortryd</button>
             </div>
         </div>
     </div>
 
     <!-- Status Modal -->
     <div id="statusModal" class="modal-overlay">
-        <div class="modal-content">
-            <h2 id="statusTitle">Besked</h2>
-            <p id="statusMessage"></p>
+        <div class="modal-content" style="max-width: 400px; text-align: center;">
+            <h2 id="statusTitle" style="margin-bottom: 15px;">Besked</h2>
+            <p id="statusMessage" style="margin-bottom: 25px;"></p>
             <button class="btn btn-primary" onclick="document.getElementById('statusModal').style.display='none'">Forstået</button>
         </div>
     </div>
