@@ -1473,16 +1473,17 @@ footer p {
     }
 
     .nav-links li a.nav-cta {
-        border: 1px solid rgba(255,255,255,0.2) !important;
-        background: rgba(255,255,255,0.05) !important;
-        padding: 10px 20px !important;
+        border: 1px solid rgba(255,255,255,0.1) !important;
+        background: rgba(255,255,255,0.03) !important;
+        padding: 8px 15px !important;
         opacity: 1 !important;
         border-radius: 2px;
         display: block;
         width: 100%;
-        max-width: 200px;
+        max-width: 180px;
         margin: 0 auto;
         text-align: center;
+        font-size: 0.9rem;
     }
 
     .hero { min-height: 80vh; padding: 60px 0; }
@@ -1577,10 +1578,22 @@ footer p {
         margin-bottom: 30px;
     }
     
+    .hero-btns {
+        flex-direction: column;
+        width: 100%;
+        gap: 12px;
+        align-items: center;
+    }
+
+    /* Buttons */
     .btn {
         width: 100%;
+        max-width: 280px;
         text-align: center;
-        padding: 15px 20px !important;
+        padding: 14px 20px !important;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .modal-content {
