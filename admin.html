@@ -32,14 +32,14 @@
         </div>
     </header>
 
-    <section class="hero-small" style="background: var(--dark-green); padding: 60px 0 30px;">
-        <div class="container" style="display: flex; justify-content: space-between; align-items: flex-end;">
+    <section class="hero-small" style="background: var(--dark-green); padding: 80px 0 40px;">
+        <div class="container admin-hero-container">
             <div>
                 <span class="hero-brand" style="color: rgba(255,255,255,0.6);">Administrationspanel</span>
                 <h1 style="color: white; font-size: 2.5rem; margin-bottom: 5px;">Bestillingsoversigt</h1>
                 <p id="adminStatus" style="color: rgba(255,255,255,0.7); font-size: 0.9rem; font-weight: 400;"></p>
             </div>
-            <div style="padding-bottom: 5px; display: flex; gap: 10px;">
+            <div class="admin-btns">
                 <button onclick="testConnection()" class="btn btn-outline" style="border-radius: 4px; padding: 10px 20px !important; font-size: 0.7rem; border-color: #ffd700; color: #ffd700 !important;">Tjek Forbindelse ⚡</button>
                 <button onclick="fetchOrders()" class="btn btn-outline" style="border-radius: 4px; padding: 10px 20px !important; font-size: 0.7rem;">Opdater liste 🔄</button>
             </div>

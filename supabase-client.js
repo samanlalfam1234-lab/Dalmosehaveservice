@@ -89,8 +89,21 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('keydown', async function(e) {
     if (e.key === 'F2') {
         const { data: { session } } = await window.supabaseClient.auth.getSession();
-        if (session && window.isAdmin(session.user.email)) {
-            window.location.href = 'admin.html';
+        if (session) {
+            if (window.isAdmin(session.user.email)) {
+                window.location.href = 'admin.html';
+            } else {
+                if (window.showNotification) {
+                    window.showNotification("Adgang nægtet: Du er ikke admin", true);
+                }
+            }
+        } else {
+            if (window.showNotification) {
+                window.showNotification("Log ind som admin først", true);
+            }
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 1000);
         }
     }
 });

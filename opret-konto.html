@@ -77,20 +77,37 @@
 
             if (error) {
                 if (window.showNotification) {
-                    window.showNotification("Fejl ved oprettelse: " + error.message, true);
+                    window.showNotification("Fejl: " + error.message, true);
                 }
             } else {
-                // Gem login status og email ligesom i login.html
-                localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('userEmail', email);
+                // Forsøg at logge ind automatisk efter oprettelse
+                const { error: loginError } = await window.supabaseClient.auth.signInWithPassword({
+                    email: email,
+                    password: password,
+                });
                 
-                if (window.showNotification) {
-                    window.showNotification("Du har nu oprettet en konto");
-                    setTimeout(() => {
+                if (!loginError) {
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('userEmail', email);
+                    
+                    if (window.showNotification) {
+                        window.showNotification("Du har nu oprettet en konto!");
+                        setTimeout(() => {
+                            window.location.href = 'bestil.html';
+                        }, 1500);
+                    } else {
                         window.location.href = 'bestil.html';
-                    }, 1500);
+                    }
                 } else {
-                    window.location.href = 'bestil.html';
+                    // Hvis automatisk login fejler (f.eks. pga email bekræftelse), send dem til login siden
+                    if (window.showNotification) {
+                        window.showNotification("Konto oprettet! Tjek din email (hvis krævet) og log ind.");
+                        setTimeout(() => {
+                            window.location.href = 'login.html';
+                        }, 2500);
+                    } else {
+                        window.location.href = 'login.html';
+                    }
                 }
             }
         });

@@ -55,8 +55,16 @@ body {
 
 /* Prevent blue phone links on mobile */
 a[href^="tel"] {
-    color: inherit;
-    text-decoration: none;
+    color: inherit !important;
+    text-decoration: none !important;
+}
+
+/* Strict overflow control to prevent zooming out issues on mobile */
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
 }
 
 h1, h2, h3, .logo {
@@ -246,15 +254,19 @@ img {
     display: flex;
     z-index: 1;
     animation: heroSlide 18s infinite cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 .hero-bg-img {
-    width: 33.333%;
+    width: 33.3333%;
     height: 100%;
     background-size: cover;
     background-position: center;
     filter: brightness(0.5);
     transition: filter 0.8s ease;
+    flex-shrink: 0;
 }
 
 .hero::after {
@@ -269,10 +281,17 @@ img {
 }
 
 @keyframes heroSlide {
-    0%, 30% { transform: translateX(0); }
-    33%, 63% { transform: translateX(-33.333%); }
-    66%, 96% { transform: translateX(-66.666%); }
-    100% { transform: translateX(0); }
+    0%, 30% { transform: translateX(0); -webkit-transform: translateX(0); }
+    33%, 63% { transform: translateX(-33.3333%); -webkit-transform: translateX(-33.3333%); }
+    66%, 96% { transform: translateX(-66.6666%); -webkit-transform: translateX(-66.6666%); }
+    100% { transform: translateX(0); -webkit-transform: translateX(0); }
+}
+
+@-webkit-keyframes heroSlide {
+    0%, 30% { -webkit-transform: translateX(0); }
+    33%, 63% { -webkit-transform: translateX(-33.3333%); }
+    66%, 96% { -webkit-transform: translateX(-66.6666%); }
+    100% { -webkit-transform: translateX(0); }
 }
 
 /* Entrance Animations */
@@ -741,8 +760,6 @@ img {
         width: 100%;
         display: block !important;
     }
-
-    .hero-bg-img:nth-child(n+2) { display: none !important; } /* Only 1 image on mobile hero */
 }
 
 /* Pricing Section */
@@ -1072,10 +1089,22 @@ img {
 }
 
 .service-detailed {
-    display: flex;
-    align-items: center;
-    gap: 80px;
-    margin-bottom: 120px;
+    display: block;
+    margin-bottom: 100px;
+    padding: 60px;
+    background: var(--white);
+    border: 2px solid var(--dark-green);
+    border-radius: 4px;
+    transition: var(--transition);
+}
+
+.service-detailed:last-child {
+    margin-bottom: 0;
+}
+
+.service-detailed:hover {
+    box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+    transform: translateY(-5px);
 }
 
 .service-detailed.reverse {
@@ -1162,9 +1191,9 @@ img {
 }
 
 @media (max-width: 992px) {
-    .service-detailed, .service-detailed.reverse {
-        flex-direction: column;
-        gap: 40px;
+    .service-detailed {
+        padding: 40px 20px;
+        margin-bottom: 60px;
     }
     
     .service-text h2 {
@@ -1478,7 +1507,7 @@ footer p {
 
     .section-title { font-size: 1.5rem; margin-bottom: 30px; }
     .services-grid { grid-template-columns: 1fr; }
-    .service-detailed { gap: 20px; margin-bottom: 60px; }
+    .service-detailed { margin-bottom: 40px; }
     .service-text h2 { font-size: 1.8rem; }
     
     .contact-wrapper { grid-template-columns: 1fr; gap: 30px; }
@@ -1507,24 +1536,71 @@ footer p {
 
     .hero-features .dot { display: inline-block; opacity: 0.5; }
 
-    .login-container, .order-container { padding: 30px 15px; border: 2px solid var(--dark-green); }
+    .login-container, .order-container { padding: 40px 20px; border: 3px solid var(--dark-green); border-radius: 4px; }
     .login-header h1 { font-size: 1.8rem; }
     
-    .container { padding: 0 15px; }
-    .logo-img { height: 45px; }
+    .container { padding: 0 20px; }
+    .logo-img { height: 40px; }
 
-    /* Admin specific mobile fixes */
-    .hero-small .container {
-        flex-direction: column !important;
-        align-items: center !important;
-        text-align: center !important;
+    /* Fix Om Os page on mobile */
+    .about-clean { padding: 40px 0; overflow: hidden; }
+    .about-header { padding: 0 10px; }
+    .about-main-text { padding: 0 10px; }
+    .about-main-text p { font-size: 0.95rem; line-height: 1.5; }
+    
+    /* Better spacing for why-us scroll */
+    .why-us-grid {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
         gap: 20px;
+        padding: 20px 20px 40px;
+        margin: 0 -20px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .why-card {
+        min-width: 85vw;
+        margin-right: 10px;
     }
 
-    .hero-small .container div {
+    /* Fixed buttons for services */
+    .service-detailed {
+        padding: 30px 20px;
+        border-width: 3px;
+        margin-bottom: 30px;
+    }
+    
+    .btn {
+        width: 100%;
+        text-align: center;
+        padding: 15px 20px !important;
+    }
+
+    /* Admin specific mobile fixes */
+    .admin-hero-container {
         display: flex;
-        flex-direction: column;
-        align-items: center;
+        justify-content: space-between;
+        align-items: flex-end;
+        width: 100%;
+    }
+
+    .admin-btns {
+        display: flex;
+        gap: 15px;
+    }
+
+    @media (max-width: 768px) {
+        .admin-hero-container {
+            flex-direction: column !important;
+            align-items: center !important;
+            text-align: center !important;
+            gap: 20px !important;
+        }
+        .admin-btns {
+            flex-direction: column;
+            width: 100%;
+        }
     }
 }
 
