@@ -1475,15 +1475,15 @@ footer p {
     .nav-links li a.nav-cta {
         border: 1px solid rgba(255,255,255,0.1) !important;
         background: rgba(255,255,255,0.03) !important;
-        padding: 14px 25px !important;
+        padding: 10px 20px !important;
         opacity: 1 !important;
         border-radius: 4px;
         display: block;
         width: 100%;
-        max-width: 240px;
+        max-width: 210px;
         margin: 0 auto;
         text-align: center;
-        font-size: 1.1rem;
+        font-size: 1rem;
     }
 
     .hero { min-height: 80vh; padding: 60px 0; }
@@ -1588,14 +1588,18 @@ footer p {
     /* Buttons */
     .btn {
         width: 100%;
-        max-width: 320px;
+        max-width: 260px;
         text-align: center;
-        padding: 18px 30px !important;
-        font-size: 1.1rem;
+        padding: 14px 25px !important;
+        font-size: 1rem;
         display: flex;
         justify-content: center;
         align-items: center;
     }
+
+    .service-text { text-align: left !important; }
+    .service-text p { text-align: left !important; }
+    .service-detailed { text-align: left !important; }
 
     .modal-content {
         padding: 40px 20px;
