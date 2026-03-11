@@ -63,26 +63,5 @@
             <p>&copy; 2026 Dalmose Naturservice. Alle rettigheder forbeholdes.</p>
         </div>
     </footer>
-
-    <script>
-        async function updateUI() {
-            const { data: { session } } = await window.supabaseClient.auth.getSession();
-            if (session) {
-                document.getElementById('loginWrapper').style.display = 'none';
-                document.getElementById('logoutWrapper').style.display = 'block';
-            }
-        }
-        updateUI();
-
-        if (document.getElementById('logoutBtn')) {
-            document.getElementById('logoutBtn').addEventListener('click', async function(e) {
-                e.preventDefault();
-                await window.supabaseClient.auth.signOut();
-                localStorage.removeItem('isLoggedIn');
-                localStorage.removeItem('userEmail');
-                window.location.reload();
-            });
-        }
-    </script>
 </body>
 </html>

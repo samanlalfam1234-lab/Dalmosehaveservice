@@ -68,6 +68,47 @@ document.addEventListener('DOMContentLoaded', () => {
         updateAuthUI();
     });
 
+    // Global Logout Handler
+    document.addEventListener('click', async (e) => {
+        const logoutBtn = e.target.id === 'logoutBtn' || e.target.closest('#logoutBtn');
+        if (logoutBtn) {
+            e.preventDefault();
+            
+            // Create custom confirm modal if it doesn't exist
+            let confirmModal = document.getElementById('logoutConfirmModal');
+            if (!confirmModal) {
+                confirmModal = document.createElement('div');
+                confirmModal.id = 'logoutConfirmModal';
+                confirmModal.className = 'modal-overlay';
+                confirmModal.innerHTML = `
+                    <div class="modal-content">
+                        <h2>Log ud?</h2>
+                        <p>Er du sikker på, at du vil logge ud af din konto?</p>
+                        <div class="modal-btns" style="flex-direction: row; gap: 15px;">
+                            <button id="confirmLogoutBtn" class="btn btn-primary" style="flex: 1;">JA, LOG UD</button>
+                            <button id="cancelLogoutBtn" class="btn btn-outline" style="flex: 1; border-color: #ddd !important; color: #666 !important;">FORTRYD</button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(confirmModal);
+                
+                // Add events
+                document.getElementById('cancelLogoutBtn').addEventListener('click', () => {
+                    confirmModal.style.display = 'none';
+                });
+                
+                document.getElementById('confirmLogoutBtn').addEventListener('click', async () => {
+                    await window.supabaseClient.auth.signOut();
+                    localStorage.removeItem('isLoggedIn');
+                    localStorage.removeItem('userEmail');
+                    window.location.href = 'index.html';
+                });
+            }
+            
+            confirmModal.style.display = 'flex';
+        }
+    });
+
     // Scroll Reveal Logic
     const reveal = () => {
         const reveals = document.querySelectorAll('.reveal');

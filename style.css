@@ -1473,10 +1473,14 @@ footer p {
     }
 
     .nav-links li a.nav-cta {
-        border: none !important;
-        background: transparent !important;
-        padding: 0 !important;
+        border: 2px solid rgba(255,255,255,0.2) !important;
+        background: rgba(255,255,255,0.05) !important;
+        padding: 12px 25px !important;
         opacity: 1 !important;
+        border-radius: 4px;
+        display: block;
+        width: 100%;
+        text-align: center;
     }
 
     .hero { min-height: 80vh; padding: 60px 0; }
@@ -1576,6 +1580,16 @@ footer p {
         text-align: center;
         padding: 15px 20px !important;
     }
+
+    .modal-content {
+        padding: 40px 20px;
+        border-radius: 12px;
+        width: 95%;
+    }
+
+    .modal-content h2 { font-size: 1.5rem; }
+    .modal-content p { font-size: 1rem; margin-bottom: 25px; }
+    .modal-close { top: 15px; right: 15px; }
 
     /* Admin specific mobile fixes */
     .admin-hero-container {

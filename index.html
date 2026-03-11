@@ -67,17 +67,17 @@
             <div class="why-us-grid">
                 <div class="why-card">
                     <div class="card-num">01</div>
-                    <h3>Pålidelighed 🤝</h3>
+                    <h3>Pålidelighed</h3>
                     <p>Vi overholder alle aftaler og kommer altid til den aftalte tid.</p>
                 </div>
                 <div class="why-card">
                     <div class="card-num">02</div>
-                    <h3>Top Kvalitet ✨</h3>
+                    <h3>Top Kvalitet</h3>
                     <p>Vi går op i detaljerne og leverer et resultat, vi er stolte af.</p>
                 </div>
                 <div class="why-card">
                     <div class="card-num">03</div>
-                    <h3>Fair Priser 💰</h3>
+                    <h3>Fair Priser</h3>
                     <p>Høj kvalitet behøver ikke koste en formue. Vi er konkurrencedygtige.</p>
                 </div>
             </div>
@@ -100,17 +100,5 @@
             <p>&copy; 2026 Dalmose Naturservice. Alle rettigheder forbeholdes.</p>
         </div>
     </footer>
-
-    <script>
-        if (document.getElementById('logoutBtn')) {
-            document.getElementById('logoutBtn').addEventListener('click', async function(e) {
-                e.preventDefault();
-                await window.supabaseClient.auth.signOut();
-                localStorage.removeItem('isLoggedIn');
-                localStorage.removeItem('userEmail');
-                window.location.reload();
-            });
-        }
-    </script>
 </body>
 </html>

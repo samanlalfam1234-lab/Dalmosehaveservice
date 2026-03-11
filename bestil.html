@@ -55,29 +55,29 @@
                     <input type="text" placeholder="Adresse (Vej, Nr, By)" required>
                     
                     <div class="form-group">
-                        <label>Vælg service 🛠️</label>
+                        <label>Vælg service</label>
                         <div class="service-selector">
                             <input type="radio" id="graesslaaning" name="ydelse" value="graesslaaning" required>
                             <label for="graesslaaning" class="service-tile">
                                 <span class="tile-icon">🌱</span>
-                                <span class="tile-text">Græsslåning ✨</span>
+                                <span class="tile-text">Græsslåning</span>
                             </label>
 
                             <input type="radio" id="snerydning" name="ydelse" value="snerydning" required>
                             <label for="snerydning" class="service-tile">
                                 <span class="tile-icon">❄️</span>
-                                <span class="tile-text">Snerydning 🚜</span>
+                                <span class="tile-text">Snerydning</span>
                             </label>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="dato">Vælg dato 📅</label>
+                            <label for="dato">Vælg dato</label>
                             <input type="date" id="dato" name="dato" required>
                         </div>
                         <div class="form-group">
-                            <label for="tid">Vælg tid (15:30 - 17:00) ⏰</label>
+                            <label for="tid">Vælg tid (15:30 - 17:00)</label>
                             <select id="tid" name="tid" required>
                                 <option value="" disabled selected>Vælg tidspunkt...</option>
                                 <!-- Tider genereres via JS -->
@@ -221,16 +221,6 @@
             showStatus("Tak!", "Vi har modtaget din bestilling og vender hurtigt tilbage.");
             this.reset();
         });
-
-        if (document.getElementById('logoutBtn')) {
-            document.getElementById('logoutBtn').addEventListener('click', async function(e) {
-                e.preventDefault();
-                await window.supabaseClient.auth.signOut();
-                localStorage.removeItem('isLoggedIn');
-                localStorage.removeItem('userEmail');
-                window.location.reload();
-            });
-        }
     </script>
 </body>
 </html>
