@@ -40,8 +40,8 @@
                 <p id="adminStatus" style="color: rgba(255,255,255,0.7); font-size: 0.9rem; font-weight: 400;"></p>
             </div>
             <div class="admin-btns">
-                <button onclick="testConnection()" class="btn btn-outline" style="border-radius: 4px; padding: 10px 20px !important; font-size: 0.7rem; border-color: #ffd700; color: #ffd700 !important;">Tjek Forbindelse ⚡</button>
-                <button onclick="fetchOrders()" class="btn btn-outline" style="border-radius: 4px; padding: 10px 20px !important; font-size: 0.7rem;">Opdater liste 🔄</button>
+                <button onclick="testConnection()" class="btn btn-outline" style="border-radius: 8px; padding: 10px 20px !important; font-size: 0.7rem; border-color: #ffd700; color: #ffd700 !important;">Tjek Forbindelse ⚡</button>
+                <button onclick="fetchOrders()" class="btn btn-outline" style="border-radius: 8px; padding: 10px 20px !important; font-size: 0.7rem;">Opdater liste 🔄</button>
             </div>
         </div>
     </section>
@@ -169,7 +169,7 @@
                         </td>
                         <td style="padding: 15px; font-weight: 700;">${order.name}</td>
                         <td style="padding: 15px;">
-                            <span style="background: rgba(26, 48, 32, 0.08); color: var(--dark-green); padding: 4px 10px; border-radius: 4px; font-weight: 800; font-size: 0.65rem; text-transform: uppercase;">
+                            <span style="background: rgba(26, 48, 32, 0.08); color: var(--dark-green); padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 0.65rem; text-transform: uppercase;">
                                 ${order.service === 'graesslaaning' ? '🌱 Græs' : '❄️ Sne'}
                             </span>
                         </td>
@@ -182,7 +182,7 @@
                             <div style="font-size: 0.7rem; color: #aaa; margin-top: 5px; font-style: italic;">${displayDescription}</div>
                         </td>
                         <td style="padding: 15px; text-align: right;">
-                            <button onclick="deleteOrder('${order.id}')" style="background: #fff; color: #ff4d4d; border: 1px solid #ff4d4d; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: 700; font-size: 0.7rem; transition: all 0.2s ease;">SLET</button>
+                            <button onclick="deleteOrder('${order.id}')" style="background: #fff; color: #ff4d4d; border: 1px solid #ff4d4d; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 0.7rem; transition: all 0.2s ease;">SLET</button>
                         </td>
                     </tr>
                 `;

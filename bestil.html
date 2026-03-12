@@ -55,20 +55,44 @@
                     <input type="text" placeholder="Adresse (Vej, Nr, By)" required>
                     
                     <div class="form-group">
-                        <label>Vælg service</label>
-                        <div class="service-selector">
-                            <input type="radio" id="graesslaaning" name="ydelse" value="graesslaaning" required>
-                            <label for="graesslaaning" class="service-tile">
-                                <span class="tile-icon">🌱</span>
-                                <span class="tile-text">Græsslåning</span>
-                            </label>
-
-                            <input type="radio" id="snerydning" name="ydelse" value="snerydning" required>
-                            <label for="snerydning" class="service-tile">
-                                <span class="tile-icon">❄️</span>
-                                <span class="tile-text">Snerydning</span>
-                            </label>
+                        <label>Vælg services</label>
+                        <div class="custom-select-wrapper">
+                            <div class="custom-select-trigger" onclick="toggleDropdown()">
+                                <span id="selectedServicesText">Vælg services...</span>
+                                <div class="arrow"></div>
+                            </div>
+                            <div class="custom-options" id="servicesDropdown">
+                                <label class="custom-option">
+                                    <input type="checkbox" name="service" value="graesslaaning" onchange="updateSelectedText(this)">
+                                    <span>🌱 Græsslåning</span>
+                                </label>
+                                <label class="custom-option">
+                                    <input type="checkbox" name="service" value="snerydning" onchange="updateSelectedText(this)">
+                                    <span>❄️ Snerydning</span>
+                                </label>
+                                <label class="custom-option">
+                                    <input type="checkbox" name="service" value="blade-rydning" onchange="updateSelectedText(this)">
+                                    <span>🍂 Blade-rydning</span>
+                                </label>
+                                <label class="custom-option">
+                                    <input type="checkbox" name="service" value="vinduespudsning" id="windowService" onchange="updateSelectedText(this)">
+                                    <span>🪟 Vinduespudsning</span>
+                                </label>
+                            </div>
                         </div>
+                        <div id="selectedServicesList" class="selected-tags-container"></div>
+                    </div>
+
+                    <div id="windowCountWrapper" class="form-group" style="display: none; animation: fadeIn 0.3s ease;">
+                        <label for="vinduer">Hvor mange vinduer skal pudses?</label>
+                        <select id="vinduer" name="vinduer">
+                            <option value="" disabled selected>Vælg antal vinduer...</option>
+                            <script>
+                                for(let i=1; i<=50; i++) {
+                                    document.write(`<option value="${i}">${i} ${i===1?'vindue':'vinduer'}</option>`);
+                                }
+                            </script>
+                        </select>
                     </div>
 
                     <div class="form-row">
@@ -153,11 +177,82 @@
             const params = new URLSearchParams(window.location.search);
             const service = params.get('service');
             if (service) {
-                const radio = document.getElementById(service);
-                if (radio) radio.checked = true;
+                const checkboxes = document.querySelectorAll(`input[name="service"]`);
+                checkboxes.forEach(cb => {
+                    if (cb.value === service) cb.checked = true;
+                });
+                updateSelectedText();
             }
         }
         checkURLParams();
+
+        function toggleDropdown() {
+            const dropdown = document.getElementById('servicesDropdown');
+            dropdown.classList.toggle('active');
+            document.querySelector('.custom-select-trigger').classList.toggle('active');
+        }
+
+        function updateSelectedText(checkbox) {
+            const checked = Array.from(document.querySelectorAll('input[name="service"]:checked'));
+            const textSpan = document.getElementById('selectedServicesText');
+            
+            // Highlight active row (Light up)
+            if (checkbox) {
+                if (checkbox.checked) {
+                    checkbox.closest('.custom-option').classList.add('selected');
+                } else {
+                    checkbox.closest('.custom-option').classList.remove('selected');
+                }
+            }
+
+            // Update selected tags
+            const list = document.getElementById('selectedServicesList');
+            list.innerHTML = '';
+            checked.forEach(cb => {
+                const tag = document.createElement('div');
+                tag.className = 'service-tag-mini';
+                tag.innerHTML = `${cb.parentElement.querySelector('span').textContent} <span class="remove" onclick="removeService('${cb.value}')">&times;</span>`;
+                list.appendChild(tag);
+            });
+
+            // Show/hide window count
+            const windowService = document.getElementById('windowService');
+            const windowWrapper = document.getElementById('windowCountWrapper');
+            if (windowService && windowService.checked) {
+                windowWrapper.style.display = 'block';
+                document.getElementById('vinduer').setAttribute('required', 'true');
+            } else {
+                windowWrapper.style.display = 'none';
+                document.getElementById('vinduer').removeAttribute('required');
+            }
+            
+            // Keep trigger text clean (fixed text)
+            if (checked.length === 0) {
+                textSpan.textContent = "Vælg services...";
+                textSpan.style.color = "#999";
+            } else {
+                textSpan.textContent = "Vælg services...";
+                textSpan.style.color = "var(--black)";
+            }
+        }
+
+        function removeService(value) {
+            const cb = document.querySelector(`input[name="service"][value="${value}"]`);
+            if (cb) {
+                cb.checked = false;
+                cb.closest('.custom-option').classList.remove('selected');
+                updateSelectedText();
+            }
+        }
+
+        // Luk dropdown hvis man klikker udenfor
+        window.addEventListener('click', function(e) {
+            const wrapper = document.querySelector('.custom-select-wrapper');
+            if (!wrapper.contains(e.target)) {
+                document.getElementById('servicesDropdown').classList.remove('active');
+                document.querySelector('.custom-select-trigger').classList.remove('active');
+            }
+        });
 
         function showStatus(title, message) {
             document.getElementById('statusTitle').textContent = title;
@@ -182,16 +277,26 @@
             const email = this.querySelector('input[placeholder="Email"]').value;
             const phone = this.querySelector('input[placeholder="Telefonnummer"]').value;
             const address = this.querySelector('input[placeholder="Adresse (Vej, Nr, By)"]').value;
-            const service = this.querySelector('input[name="ydelse"]:checked').value;
+            
+            const selectedServices = Array.from(this.querySelectorAll('input[name="service"]:checked')).map(el => el.value);
+            if (selectedServices.length === 0) {
+                showStatus("Vælg service", "Vælg venligst mindst én service for at bestille.");
+                return;
+            }
+            const service = selectedServices.join(', ');
+
             const date = this.querySelector('#dato').value;
             const time = this.querySelector('#tid').value;
+            const windowCount = document.getElementById('vinduer').value;
             const description = this.querySelector('textarea').value;
+
+            const finalDescription = windowCount ? `[Antal vinduer: ${windowCount}] ${description}` : description;
 
             // Prøv først med 'time' kolonnen
             let { error } = await window.supabaseClient
                 .from('orders')
                 .insert([{
-                    name, email, phone, address, service, date, time, description
+                    name, email, phone, address, service, date, time, description: finalDescription
                 }]);
 
             // Hvis det fejler pga. manglende 'time' kolonne, prøv uden

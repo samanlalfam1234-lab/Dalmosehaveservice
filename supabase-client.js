@@ -46,19 +46,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle Login/Logout visibility globally
     const updateAuthUI = async () => {
-        const loginWrapper = document.getElementById('loginWrapper');
-        const logoutWrapper = document.getElementById('logoutWrapper');
-        if (!loginWrapper || !logoutWrapper) return;
-
+        const loginWrappers = document.querySelectorAll('#loginWrapper');
+        const logoutWrappers = document.querySelectorAll('#logoutWrapper');
+        
         const { data: { session } } = await window.supabaseClient.auth.getSession();
         
-        if (session) {
-            loginWrapper.style.display = 'none';
-            logoutWrapper.style.display = 'block';
-        } else {
-            loginWrapper.style.display = 'block';
-            logoutWrapper.style.display = 'none';
-        }
+        loginWrappers.forEach(el => {
+            el.style.display = session ? 'none' : 'block';
+        });
+        
+        logoutWrappers.forEach(el => {
+            el.style.display = session ? 'block' : 'none';
+        });
     };
 
     updateAuthUI();

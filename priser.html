@@ -11,6 +11,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-client.js"></script>
+    <style>
+        .standalone-pricing { padding: 80px 0 120px; }
+    </style>
 </head>
 <body>
     <header>
@@ -41,49 +44,74 @@
         <div class="container">
             <span class="hero-brand">Dalmose Naturservice</span>
             <h1 class="main-title">Vores Priser</h1>
-            <p>Gennemsigtige priser uden skjulte gebyrer. Vælg den løsning, der passer bedst til din have.</p>
+            <p>Spar penge med vores populære abonnement eller vælg enkelte services.</p>
         </div>
     </section>
 
-    <section class="pricing standalone-pricing reveal">
+    <section class="pricing standalone-pricing reveal active">
         <div class="container">
             <div class="pricing-grid">
-                <div class="pricing-card">
-                    <div class="pricing-header">
-                        <h3>Enkeltbesøg</h3>
-                        <p class="price-desc">Perfekt til hurtig hjælp</p>
-                    </div>
-                    <div class="price-body">
-                        <div class="price-item">
-                            <span class="label">Første gang</span>
-                            <span class="amount">84,99 kr</span>
-                        </div>
-                        <div class="price-item">
-                            <span class="label">Derefter</span>
-                            <span class="amount">99,99 kr</span>
-                            <span class="unit">pr. gang</span>
-                        </div>
-                    </div>
-                    <a href="bestil.html" class="btn btn-dark btn-full">Bestil nu</a>
-                </div>
-
+                <!-- Abonnement -->
                 <div class="pricing-card featured">
-                    <div class="badge">Bedste tilbud</div>
+                    <div class="badge">Mest Populære</div>
                     <div class="pricing-header">
-                        <h3>Abonnement</h3>
-                        <p class="price-desc">Fuld service hele måneden</p>
+                        <h3>All-inclusive</h3>
+                        <p class="price-desc">Den bedste løsning til din have</p>
                     </div>
                     <div class="price-display">
-                        <span class="amount">149,99 kr</span>
+                        <span class="amount">399,99 kr.</span>
                         <span class="unit">pr. måned</span>
                     </div>
                     <ul class="pricing-features">
-                        <li>Op til 3 gange om måneden</li>
-                        <li>Fast vedligeholdelse</li>
-                        <li>Ingen skjulte gebyrer</li>
-                        <li>Altid prioriteret</li>
+                        <li>🌿 Fuld havepleje hver måned</li>
+                        <li>🪟 Vinduespudsning (op til 10 stk)</li>
+                        <li>❄️ Snerydning & Blade-rydning</li>
+                        <li>Fri for bekymringer</li>
+                        <li>Fast lav pris</li>
                     </ul>
                     <a href="bestil.html" class="btn btn-primary btn-full">Vælg abonnement</a>
+                </div>
+
+                <!-- Enkeltbesøg / Services -->
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <h3>Enkelte Services</h3>
+                        <p class="price-desc">Betal kun for det du har brug for</p>
+                    </div>
+                    <div class="price-body">
+                        <div class="price-item">
+                            <span class="label">🍂 Blade-rydning</span>
+                            <span class="amount">149,99 kr.</span>
+                        </div>
+                        <div class="price-item">
+                            <span class="label">🌱 Græsslåning</span>
+                            <span class="amount">99,99 kr.</span>
+                        </div>
+                        <div class="price-item">
+                            <span class="label">❄️ Snerydning</span>
+                            <span class="amount">89,99 kr.</span>
+                        </div>
+                        
+                        <div class="window-calc">
+                            <div class="price-item" style="border:none; padding:0;">
+                                <span class="label">🪟 Vinduespudsning</span>
+                                <span class="amount">10 kr./stk</span>
+                            </div>
+                            <select id="windowCount" onchange="calculateWindows()">
+                                <option value="0">Hvor mange vinduer?</option>
+                                <script>
+                                    for(let i=1; i<=50; i++) {
+                                        document.write(`<option value="${i}">${i} ${i===1?'vindue':'vinduer'}</option>`);
+                                    }
+                                </script>
+                            </select>
+                            <div class="calc-result">
+                                <span>Total pris:</span>
+                                <span id="windowPrice">0 kr.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="bestil.html" class="btn btn-dark btn-full">Bestil nu</a>
                 </div>
             </div>
         </div>
@@ -94,5 +122,13 @@
             <p>&copy; 2026 Dalmose Naturservice. Alle rettigheder forbeholdes.</p>
         </div>
     </footer>
+
+    <script>
+        function calculateWindows() {
+            const count = document.getElementById('windowCount').value;
+            const price = count * 10;
+            document.getElementById('windowPrice').textContent = price + ' kr.';
+        }
+    </script>
 </body>
 </html>
